@@ -75,7 +75,10 @@ const promptForLift = function(workout){
 
 /* Get Specific Update from User & Send to DB */
 const promptForUpdate = function(){
-	return console.log('still developing');
+	inquirer.prompt(questions.updateQuestions())
+	.then( update => {
+		queries.updateRecord(update.table, update.id, update.col || 'workout_date', update.val)
+	});
 };
 
 /* Get Report Type from User & Display */

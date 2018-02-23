@@ -101,14 +101,8 @@ let WorkoutQueries = function(connection){
 	LIMIT 1
 	`;
 
-	const _cardioUpdate = `
-	UPDATE cardio 
-	SET ?
-	WHERE id = ?
-	`;
-
-	const _liftUpdate = `
-	UPDATE lift 
+	const _updateRecord = `
+	UPDATE ? 
 	SET ?
 	WHERE id = ?
 	`;
@@ -155,6 +149,14 @@ let WorkoutQueries = function(connection){
 				[lift_type, reps, weight, res.insertId], 
 				logOutput);
 		});
+	}
+
+	this.updateRecord = function(table, record_id, col, val){
+		let id_name = table === 'workouts' ? 'workout_id' : table + '_id';
+		connection.query(
+			_updateRecord,
+			[table, {[col]: val}, {[id_name]: record_id}],
+			logOutput);
 	}
 	
 	this.report = function(type){

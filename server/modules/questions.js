@@ -166,8 +166,99 @@ let CLIQuestions = function(){
 			'Spin: last 10',
 			'Lift: total summary'
 		],
-		filter: function(val){
-			return val.toLowerCase().replace(/\W/gi,'');
+		filter: function(value){
+			return value.toLowerCase().replace(/\W/gi,'');
+		}
+	}
+	];
+
+	const _updateQuestions = [
+	{
+		type: 'expand',
+		name: 'table',
+		message: '***USE WITH CARE*** \nYou will be updating the DB directly \n \nWhat update are you updating? \n d = Date c = Cardio l = Lift \nHit + Enter \n',
+		choices: [
+		{
+			key: 'd',
+			name: 'Workout date update',
+			value: 'workouts'
+		},
+		{
+			key: 'c',
+			name: 'Cardio workout update',
+			value: 'cardio'
+		},
+		{
+			key: 'l',
+			name: 'Lift workout update',
+			value: 'lift'
+		}
+		]
+	},
+	{
+		type: 'input',
+		name: 'id',
+		message: `What is the record id?`,
+		validate: function(value){
+			return (value > 0) ? true : '\nEnter a valid id please';
+		}
+	},
+	{
+		type: 'expand',
+		name: 'column',
+		message: 'What update are you updating? \n t = Time (duration) d = Distance p = Power r = Rank \nHit + Enter \n',
+		choices: [
+		{
+			key: 't',
+			name: 'Time (duration)',
+			value: 'duration'
+		},
+		{
+			key: 'd',
+			name: 'Distance',
+			value: 'distance'
+		},
+		{
+			key: 'p',
+			name: 'Power',
+			value: 'power'
+		},
+		{
+			key: 'r',
+			name: 'Rank',
+			value: 'rank'
+		}
+		],
+		when: function(answers) {
+			return answers.table === 'cardio';
+		}
+	},
+	{
+		type: 'expand',
+		name: 'column',
+		message: 'What update are you updating? \n r = Reps w = Weight \nHit + Enter \n',
+		choices: [
+		{
+			key: 'r',
+			name: 'Reps',
+			value: 'reps'
+		},
+		{
+			key: 'w',
+			name: 'Weight',
+			value: 'weight'
+		}
+		],
+		when: function(answers) {
+			return answers.table === 'lift';
+		}
+	},
+	{
+		type: 'input',
+		name: 'val',
+		message: 'What is the new value?',
+		validate: function(value){
+			return value ? true : '\nNew value is required';
 		}
 	}
 	];
@@ -187,11 +278,13 @@ let CLIQuestions = function(){
 	this.liftQuestions = function(){
 		return _liftQuestions;
 	}
+
 	this.reportQuestions = function(){
 		return _reportQuestions;
 	}
-	this.liftQuestions = function(){
-		return _liftQuestions;
+
+	this.updateQuestions = function(){
+		return _updateQuestions;
 	}
 }
 

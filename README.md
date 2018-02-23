@@ -10,7 +10,7 @@ demo videos to appear here...
 ## Your Turn: Setup Instructions
 
 > "I thought those workouts were cardio before I seeded this database"
-> - you in 10 minutes
+> _you in 10 minutes_
 
 ```
 git clone https://github.com/krosenk729/Node-SQL-Workout-Logger.git
