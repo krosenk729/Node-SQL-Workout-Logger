@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Insert Your Runs to SQL</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <style type="text/css">
+  .sidebar{
+    position: fixed;
+  }
+</style>
+
+<!-- https://stackoverflow.com/questions/21415615/knockoutjs-in-express-using-ejs -->
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-dark navbar-expand mb-3">
+    <!-- dark -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link active" href="/log">Log a Workout</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/report">Punch Some Stats</a>
+      </li>
+    </ul>
+  </nav>
+  <main class="container-fluid ">
+    <div class="row flex-row-reverse flex-sm-row-reverse">
+      <div class="col-md-2 px-1 mx-1 pt-1">
+        <div class="sidebar">
+          <h5>Navigate Somewhere...</h5>
+          <p>Insert a profound quote or inspirational message here. Between running SQL and running Atlanta hills, all I have is a 404.</p>
+          <ul class="navbar-bav">
+            <li class="nav-item"><a class="nav-link" href="/log">Log a Workout</a></li>
+            <li><a class="title-bar-title" href="/report">Punch Some Stats</a></li>
+          </ul>
+          <hr>
+          <h4>Your Workout...</h4>
+    <ul>
+      <li data-bind="text: type"></li>
+      <li data-bind="text: workout_date"></li>
+      <li data-bind="text: duration"></li>
+      <li data-bind="text: distance"></li>
+      <li data-bind="text: power"></li>
+      <li data-bind="text: rank"></li>
+      <li> 
+        <ul data-bind="foreach: lifts">
+          <li>
+            <span data-bind="text: lift_type"> </span> | 
+            <span data-bind="text: weight"> </span> | 
+            <span data-bind="text: reps"> </span>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+        </div>
+      </div> <!-- col -->
+      <div class="col-md-9 mx-1 pt-1">
+        <article>
+          <h1>Log a Workout In Your Beautiful SQL DB</h1>
+          <p class="lead">The two mile walk you did do is better than the four mile run you did not</p>
+          <form id="workout-questions">
+            <div class="custom-control custom-control-inline custom-radio-buttons">
+              <label>
+                <input type="radio" name="type" value="run" checked data-bind="checked: type" />
+                Run
+              </label>
+            </div>
+            <div class="custom-control custom-control-inline custom-radio-buttons">
+              <label>
+                <input type="radio" name="type" value="spin" checked data-bind="checked: type" />
+                Spin
+              </label>
+            </div>
+            <div class="custom-control custom-control-inline custom-radio-buttons">
+              <label>
+                <input type="radio" name="type" value="lift" checked data-bind="checked: type" />
+                Lift
+              </label>
+            </div>
+            <div class="form-group row">
+              <label for="workout_date" class="col-sm-2 col-form-label">Date</label>
+              <div class="col-sm-10">
+                <input type="date" class="form-control" name="workout_date" data-bind="value: workout_date, valueUpdate: 'afterkeydown'" />
+              </div>
+            </div>
+            <section class="cardio-questions" data-bind="visible: type()!='lift'">
+              <div class="form-group row">
+                <label for="duration" class="col-sm-2 col-form-label">Time (minutes)</label>
+                <div class="col-sm-10">
+                  <input type="number" min="0" step="0.1" class="form-control" name="duration" data-bind="value: duration, valueUpdate: 'afterkeydown'" />
+                </div>
+              </div>
+              <div class="form-group row" data-bind="visible: type()==='run'">
+                <label for="distance" class="col-sm-2 col-form-label">Distance (miles)</label>
+                <div class="col-sm-10">
+                  <input type="number" min="0" step="0.1" class="form-control" name="distance" data-bind="value: distance, valueUpdate: 'afterkeydown'" />
+                </div>
+              </div>
+              <div class="form-group row" data-bind="visible: type()==='spin'">
+                <label for="power" class="col-sm-2 col-form-label">Power</label>
+                <div class="col-sm-10">
+                  <input type="number" min="0" class="form-control" name="power" data-bind="value: power, valueUpdate: 'afterkeydown'" />
+                </div>
+              </div>
+              <div class="form-group row" data-bind="visible: type()==='spin'">
+                <label for="rank" class="col-sm-2 col-form-label">Rank</label>
+                <div class="col-sm-10">
+                  <input type="number" min="0" class="form-control" id="rank" data-bind="value: rank, valueUpdate: 'afterkeydown'" />
+                </div>
+              </div>
+            </section>
+            <section class="lift-questions" data-bind="foreach: lifts, visible: type()==='lift'">
+              <div class="form-group row">
+                <legend class="col-form-label col-sm-2 pt-0">Lift</legend>
+                <div class="col-sm-10">
+
+                  <div class="custom-control custom-control-inline custom-radio">
+                    <label>
+                      <input type="radio" value="bench" checked data-bind="checked: lift_type" />
+                      Bench
+                    </label>
+                  </div>
+                  <div class="custom-control custom-control-inline custom-radio">
+                    <label>
+                      <input type="radio" value="squat" data-bind="checked: lift_type" />
+                      Squat
+                    </label>
+                  </div>
+                  <div class="custom-control custom-control-inline custom-radio">
+                    <label>
+                      <input type="radio" value="deadlift" data-bind="checked: lift_type" />
+                      Deadlift
+                    </label>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="reps" class="col-sm-2 col-form-label">Reps</label>
+                <div class="col-sm-10">
+                  <input type="number" min="0" class="form-control" name="reps" value="10" data-bind="value: reps, valueUpdate: 'afterkeydown'" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="weight" class="col-sm-2 col-form-label">Weight</label>
+                <div class="col-sm-10">
+                  <input type="number" min="0" class="form-control" name="weight" value="45" data-bind="value: weight, valueUpdate: 'afterkeydown'" />
+                </div>
+              </div>
+            </section>
+            <a href="#" data-bind="click: $root.addlift, visible: type()==='lift'">Add Lift</a>
+            <button type="submit" class="btn">Log Workout</button>
+          </form>
+        </div> <!-- main --> 
+        
+      </div>
+    </article>
+  </main> <!-- container-fluid -->
+  <script type="text/javascript">
+    let Lift = function(){
+      this.lift_type = ko.observable('bench');
+      this.reps = ko.observable( 10 );
+      this.weight = ko.observable( 45 );
+    }
+
+    let Workout = function(){
+      this.type = ko.observable('run');
+      this.workout_date = ko.observable( new Date() );
+      this.duration = ko.observable( 45 );
+      this.distance = ko.observable( '' );
+      this.power = ko.observable( 300 );
+      this.rank = ko.observable( '' );
+      this.lifts = ko.observableArray([new Lift()]);
+
+      this.addlift = function(){
+        this.lifts.push(new Lift());
+      };
+
+      this.removelift = function(lift){
+        this.lifts.remove(lift);
+      };
+
+      this.saveworkout = function(){
+
+      };
+    }
+
+    ko.applyBindings(new Workout());
+
+    $('form').on('submit', function(event){
+      event.preventDefault();
+      console.log('EVENT ', event);
+    });
+  </script>
+</body>
+</html>
