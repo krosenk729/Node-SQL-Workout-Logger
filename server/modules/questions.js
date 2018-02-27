@@ -205,7 +205,7 @@ let CLIQuestions = function(){
 	},
 	{
 		type: 'expand',
-		name: 'column',
+		name: 'col',
 		message: 'What update are you updating? \n t = Time (duration) d = Distance p = Power r = Rank \nHit + Enter \n',
 		choices: [
 		{

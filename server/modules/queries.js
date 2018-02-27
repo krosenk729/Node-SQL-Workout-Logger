@@ -101,11 +101,7 @@ let WorkoutQueries = function(connection){
 	LIMIT 1
 	`;
 
-	const _updateRecord = `
-	UPDATE ? 
-	SET ?
-	WHERE id = ?
-	`;
+	// const _updateRecord = `UPDATE ? SET ? WHERE ?`;
 
 	const _insertWrapper = function(workout_date, workout_type){
 		let created_on = new Date();
@@ -151,11 +147,15 @@ let WorkoutQueries = function(connection){
 		});
 	}
 
+	this.insertSingleWorkout = function(workout_date, workout_type){
+		connection.query(_insertWrapper(workout_date, workout_type), logOutput);
+	}
+
 	this.updateRecord = function(table, record_id, col, val){
-		let id_name = table === 'workouts' ? 'workout_id' : table + '_id';
+		let id_name = table === 'workouts' ? 'workout_id' : 'id';
 		connection.query(
-			_updateRecord,
-			[table, {[col]: val}, {[id_name]: record_id}],
+			`UPDATE ${table} SET ? WHERE ?`,
+			[{[col]: val}, {[id_name]: record_id}],
 			logOutput);
 	}
 	

@@ -12,15 +12,24 @@ const connection = sql.createConnection({
 const WorkoutQueries = require('../modules/queries');
 const queries = new WorkoutQueries(connection);
 
-fs.readFile('./seed_lifts.csv', 'utf8', function(err, res) {
+fs.readFile('./seed_workouts.csv', 'utf8', function(err,res){
 	console.log('error', err);
 	let k = (res).replace(/\r\n/gmi, '|').split('|').map( i => i.split(','));
-	k.forEach( i =>{
+	k.forEach(i =>{
 		if(i[0]){
-			queries.insertLift(i[0].trim(), i[1], i[2], i[3]);
-		}		
+			queries.insertSingleWorkout(i[0], i[1]);
+		}
 	});
-
+	fs.readFile('./seed_lifts.csv', 'utf8', function(err, res) {
+		console.log('error', err);
+		let k = (res).replace(/\r\n/gmi, '|').split('|').map( i => i.split(','));
+		k.forEach( i =>{
+			if(i[0]){
+				queries.insertLift(i[0].trim(), i[1], i[2], i[3]);
+			}		
+		});
+		queries.insertLift(k[2][0], k[2][1], k[2][2], k[2][3] );
+	});
 });
 
 fs.readFile('./seed_cardio.csv', 'utf8', function(err, res) {
