@@ -5,7 +5,8 @@ Project inspired by homework week 11 for Code Bootcamp; however, instead of stor
 
 ## Demo: A Workout For Your Eyes
 
-demo videos to appear here...
++ SEED https://youtu.be/tJsmjscVGmI
++ CRUD https://youtu.be/pS5pqgRbN9Q
 
 ## Your Turn: Setup Instructions
 
