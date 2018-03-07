@@ -9,6 +9,15 @@ let WorkoutQueries = function(connection){
 	LIMIT 10;
 	`;
 
+	const _allCardio = `
+	SELECT c.cardio_type, w.workout_date, w.created_on, c.duration, c.distance, c.power, c.rank
+	FROM cardio AS c
+	LEFT OUTER JOIN workouts AS w
+	WHERE c.workout_id = w.workout_id
+	ON c.workout_id = w.workout_id
+	ORDER BY w.workout_date;
+	`;
+
 	const _runsMilesByMonths = `
 	SELECT DATE_FORMAT(w.workout_date, '%m') AS month, SUM(c.duration), SUM(c.distance)
 	FROM cardio AS c
@@ -70,6 +79,14 @@ let WorkoutQueries = function(connection){
 	GROUP BY month;
 	`;
 
+	const _allLift = `
+	SELECT l.lift_type, w.workout_date, w.created_on, w.reps, w.weight
+	FROM lift AS l
+	LEFT OUTER JOIN workouts AS w
+	ON l.workout_id = l.workout_id
+	ORDER BY w.workout_date;
+	`;
+
 	const _liftsPerformance = `
 	SELECT MAX(weight) AS max_bench
 	FROM lift
@@ -100,8 +117,6 @@ let WorkoutQueries = function(connection){
 	AND workout_date = ?
 	LIMIT 1
 	`;
-
-	// const _updateRecord = `UPDATE ? SET ? WHERE ?`;
 
 	const _insertWrapper = function(workout_date, workout_type){
 		let created_on = new Date();
@@ -159,22 +174,31 @@ let WorkoutQueries = function(connection){
 			logOutput);
 	}
 	
-	this.report = function(type){
+	this.report = function(type, callback = logOutput){
+		// if(!callback){
+		// 	callback = logOutput;
+		// }
 		switch(type){
 			case 'runmilesbymonth':
-			connection.query(_runsMilesByMonths, logOutput);
+			connection.query(_runsMilesByMonths, callback);
 			break;
 			case 'runlast10':
-			connection.query(_runLastTen, logOutput);
+			connection.query(_runLastTen, callback);
 			break;
 			case 'spinperformance':
-			connection.query(_spinsPerformance, logOutput);
+			connection.query(_spinsPerformance, callback);
 			break;
 			case 'spinlast10':
-			connection.query(_spinsLastTen, logOutput);
+			connection.query(_spinsLastTen, callback);
 			break;
 			case 'lifttotalsummary':
-			connection.query(_liftsPerformance, logOutput);
+			connection.query(_liftsPerformance, callback);
+			break;
+			case 'allcardio':
+			connection.query(_allCardio, callback);
+			break;
+			case 'alllift':
+			connection.query(_allLift, callback);
 			break;
 		}
 	}
