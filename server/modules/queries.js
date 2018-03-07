@@ -3,7 +3,6 @@ let WorkoutQueries = function(connection){
 	SELECT c.cardio_type, w.workout_date, c.duration
 	FROM cardio AS c
 	LEFT OUTER JOIN workouts AS w
-	WHERE c.workout_id = w.workout_id
 	ON c.workout_id = w.workout_id
 	ORDER BY w.workout_date
 	LIMIT 10;
@@ -13,7 +12,6 @@ let WorkoutQueries = function(connection){
 	SELECT c.cardio_type, w.workout_date, w.created_on, c.duration, c.distance, c.power, c.rank
 	FROM cardio AS c
 	LEFT OUTER JOIN workouts AS w
-	WHERE c.workout_id = w.workout_id
 	ON c.workout_id = w.workout_id
 	ORDER BY w.workout_date;
 	`;
@@ -62,7 +60,7 @@ let WorkoutQueries = function(connection){
 	`;
 
 	const _mostRecntLifts = `
-	SELECT l.lift_type, w.workout_date, w.reps, w.weight
+	SELECT l.lift_type, w.workout_date, l.reps, l.weight
 	FROM lift AS l
 	LEFT OUTER JOIN workouts AS w
 	ON l.workout_id = l.workout_id
@@ -80,11 +78,17 @@ let WorkoutQueries = function(connection){
 	`;
 
 	const _allLift = `
-	SELECT l.lift_type, w.workout_date, w.created_on, w.reps, w.weight
+	SELECT l.lift_type, w.workout_date, w.created_on, l.reps, l.weight
 	FROM lift AS l
-	LEFT OUTER JOIN workouts AS w
+	LEFT OUTER JOIN (
+	SELECT * FROM workouts 
+	WHERE workout_date > ?
+	AND workout_type LIKE 'lift'
+	LIMIT 1000
+	) AS w
 	ON l.workout_id = l.workout_id
-	ORDER BY w.workout_date;
+	ORDER BY w.workout_date
+	LIMIT 1000;
 	`;
 
 	const _liftsPerformance = `
@@ -198,7 +202,7 @@ let WorkoutQueries = function(connection){
 			connection.query(_allCardio, callback);
 			break;
 			case 'alllift':
-			connection.query(_allLift, callback);
+			connection.query(_allLift, ['2017-01-01'], callback);
 			break;
 		}
 	}

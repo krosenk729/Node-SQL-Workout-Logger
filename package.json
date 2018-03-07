@@ -4,13 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.16.2",
     "inquirer": "^5.1.0",
     "mysql": "^2.15.0"
-  }
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.1"
+  },
+  "repository": "https://github.com/krosenk729/Node-SQL-Workout-Logger"
 }
