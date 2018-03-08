@@ -4,12 +4,9 @@ const questions = new CLIQuestions();
 
 /* Database Config */
 const sql = require('mysql');
+require('dotenv').config();
 const connection = sql.createConnection({
-	host: 'localhost',
-	port: '3306',
-	user: 'root',
-	password: 'password1',
-	database: 'db_runsql',
+	...process.env.JAWS_CONFIG,
 	multipleStatements: true
 });
 const WorkoutQueries = require('./modules/queries');

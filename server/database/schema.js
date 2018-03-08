@@ -1,11 +1,6 @@
 const sql = require('mysql');
-const connection = sql.createConnection({
-	host: 'localhost',
-	port: '3306',
-	user: 'root',
-	password: 'root',
-	multipleStatements: true
-});
+require('dotenv').config();
+const connection = sql.createConnection({...process.env.LOCAL_CONFIG});
 
 // implicit connection status with query
 // if troubleshooting , uncomment this block

@@ -3,24 +3,23 @@ const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
 
-// Middleware
+
+// Express Middleware (Body Parse, Static Files, View Engines)
 // ===========================================================
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-app.use(express.static( path.join(__dirname, 'client') ));
+
+app.use(express.static( path.join(__dirname, 'public') ));
+
+app.set('views', path.join(__dirname, 'server', 'views'));
+app.set('view engine', 'ejs');
 
 // Routes
 // ===========================================================
 const api = require('./server/routes/api');
+const pages = require('./server/routes/pages');
 app.use('/api', api);
-
-app.get('/', function(req, res) {
-  res.sendFile( path.join(__dirname, 'client/views/index.html') );
-});
-
-app.get(/^[^(api)]|^[^(images)]|^[^(javascripts)]|^[^(styles)]/i, function(req, res){
-  res.redirect('/');
-});
+app.use('/', pages);
 
 // Listener
 // ===========================================================

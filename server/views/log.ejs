@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Insert Your Runs to SQL</title>
+  <title><%= title %></title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -14,8 +14,6 @@
     position: fixed;
   }
 </style>
-
-<!-- https://stackoverflow.com/questions/21415615/knockoutjs-in-express-using-ejs -->
 </head>
 <body>
   <nav class="navbar navbar-dark bg-dark navbar-expand mb-3">
@@ -63,7 +61,7 @@
       </div> <!-- col -->
       <div class="col-md-9 mx-1 pt-1">
         <article>
-          <h1>Log a Workout In Your Beautiful SQL DB</h1>
+          <h1><%= title %></h1>
           <p class="lead">The two mile walk you did do is better than the four mile run you did not</p>
           <form id="workout-questions">
             <div class="custom-control custom-control-inline custom-radio-buttons">
@@ -164,41 +162,6 @@
       </div>
     </article>
   </main> <!-- container-fluid -->
-  <script type="text/javascript">
-    let Lift = function(){
-      this.lift_type = ko.observable('bench');
-      this.reps = ko.observable( 10 );
-      this.weight = ko.observable( 45 );
-    }
-
-    let Workout = function(){
-      this.type = ko.observable('run');
-      this.workout_date = ko.observable( new Date() );
-      this.duration = ko.observable( 45 );
-      this.distance = ko.observable( '' );
-      this.power = ko.observable( 300 );
-      this.rank = ko.observable( '' );
-      this.lifts = ko.observableArray([new Lift()]);
-
-      this.addlift = function(){
-        this.lifts.push(new Lift());
-      };
-
-      this.removelift = function(lift){
-        this.lifts.remove(lift);
-      };
-
-      this.saveworkout = function(){
-
-      };
-    }
-
-    ko.applyBindings(new Workout());
-
-    $('form').on('submit', function(event){
-      event.preventDefault();
-      console.log('EVENT ', event);
-    });
-  </script>
+  <script src="javascripts/log.js"></script>
 </body>
 </html>
