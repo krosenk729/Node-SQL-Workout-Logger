@@ -12,8 +12,14 @@ const parseUrlencoded = bodyParser.urlencoded({extended: false});
 // ===========================================================
 const sql = require('mysql');
 require('dotenv').config();
+console.log('jaws config', process.env.JAWS_CONFIG_host);
+
 const connection = sql.createConnection({
-  ... process.env.JAWS_CONFIG,
+  host: process.env.JAWS_CONFIG_host,
+  port: process.env.JAWS_CONFIG_port,
+  user: process.env.JAWS_CONFIG_user,
+  password: process.env.JAWS_CONFIG_password,
+  database: process.env.JAWS_CONFIG_database,
   multipleStatements: true
 });
 const WorkoutQueries = require('../modules/queries');

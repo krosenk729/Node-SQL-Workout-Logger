@@ -1,12 +1,12 @@
 const sql = require('mysql');
 const fs = require('fs');
 const connection = sql.createConnection({
-	host: 's54ham9zz83czkff.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
-	port: '3306',
-	user: 'jwzg9jfk04w2zvow',
-	password: 'opn8cxmjvl81f5l7',
-	database: 'p9txh84qovd6qqd2',
-	multipleStatements: true
+  host: process.env.JAWS_CONFIG_host,
+  port: process.env.JAWS_CONFIG_port,
+  user: process.env.JAWS_CONFIG_user,
+  password: process.env.JAWS_CONFIG_password,
+  database: process.env.JAWS_CONFIG_database,
+  multipleStatements: true
 });
 
 const WorkoutQueries = require('../modules/queries');
