@@ -44,6 +44,30 @@ router.route('/lift')
   });
 });
 
+router.route('/lift/recent')
+.get(function(req, res){
+  queries.report('alllift', (err, data)=>{
+    if(err){ return res.send(err); }
+    res.json( data );
+  });
+});
+
+router.route('/lift/lastMonths')
+.get(function(req, res){
+  queries.report('liftslastmonths', (err, data)=>{
+    if(err){ return res.send(err); }
+    res.json( data );
+  });
+});
+
+router.route('/lift/recent')
+.get(function(req, res){
+  queries.report('liftsrecent', (err, data)=>{
+    if(err){ return res.send(err); }
+    res.json( data );
+  });
+});
+
 // Export
 // ===========================================================
 module.exports = router;

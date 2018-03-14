@@ -2,7 +2,7 @@ let WorkoutQueries = function(connection){
 	const _mostRecentCardio = `
 	SELECT c.cardio_type, w.workout_date, c.duration
 	FROM cardio AS c
-	LEFT OUTER JOIN workouts AS w
+	INNER JOIN workouts AS w
 	ON c.workout_id = w.workout_id
 	ORDER BY w.workout_date
 	LIMIT 10;
@@ -11,7 +11,7 @@ let WorkoutQueries = function(connection){
 	const _allCardio = `
 	SELECT c.cardio_type, w.workout_date, w.created_on, c.duration, c.distance, c.power, c.rank
 	FROM cardio AS c
-	LEFT OUTER JOIN workouts AS w
+	INNER JOIN workouts AS w
 	ON c.workout_id = w.workout_id
 	ORDER BY w.workout_date;
 	`;
@@ -19,7 +19,7 @@ let WorkoutQueries = function(connection){
 	const _runsMilesByMonths = `
 	SELECT DATE_FORMAT(w.workout_date, '%m') AS month, SUM(c.duration), SUM(c.distance)
 	FROM cardio AS c
-	LEFT OUTER JOIN workouts AS w
+	INNER JOIN workouts AS w
 	ON c.workout_id = w.workout_id
 	WHERE c.cardio_type = 'run'
 	AND w.workout_date >= '2017-01-01'
@@ -29,7 +29,7 @@ let WorkoutQueries = function(connection){
 	const _runLastTen = `
 	SELECT w.workout_date, c.duration, c.distance, c.duration/c.distance AS pace
 	FROM cardio AS c
-	LEFT OUTER JOIN workouts AS w
+	INNER JOIN workouts AS w
 	ON c.workout_id = w.workout_id
 	WHERE c.cardio_type = 'run'
 	ORDER BY w.workout_date DESC
@@ -39,7 +39,7 @@ let WorkoutQueries = function(connection){
 	const _spinsPerformance = `
 	SELECT DATE_FORMAT(w.workout_date, '%m') AS month, SUM(c.duration), AVG(c.power), AVG(c.rank), MAX(c.power)
 	FROM cardio AS c
-	LEFT OUTER JOIN workouts AS w
+	INNER JOIN workouts AS w
 	ON c.workout_id = w.workout_id
 	WHERE c.cardio_type = 'spin'
 	AND w.workout_date > '2017-12-01'
@@ -52,7 +52,7 @@ let WorkoutQueries = function(connection){
 	const _spinsLastTen = `
 	SELECT w.workout_date, c.duration, c.power, c.rank
 	FROM cardio AS c
-	LEFT OUTER JOIN workouts AS w
+	INNER JOIN workouts AS w
 	ON c.workout_id = w.workout_id
 	WHERE c.cardio_type = 'spin'
 	ORDER BY w.workout_date DESC
@@ -62,31 +62,35 @@ let WorkoutQueries = function(connection){
 	const _mostRecntLifts = `
 	SELECT l.lift_type, w.workout_date, l.reps, l.weight
 	FROM lift AS l
-	LEFT OUTER JOIN workouts AS w
-	ON l.workout_id = l.workout_id
-	ORDER BY w.workout_date
-	LIMIT 20;
+	INNER JOIN (
+	SELECT * from workouts 
+	WHERE workout_date > DATE_ADD(curdate(), INTERVAL '-4' MONTH)
+	ORDER BY workout_date DESC
+	LIMIT 10
+	) AS w
+	ON l.workout_id = w.workout_id
+	ORDER BY w.workout_date;
 	`;
 	
 	const _liftsLastMonths = `
-	SELECT DATE_FORMAT(w.workout_date, '%m') AS month, SUM(l.weight * l.reps) AS all_the_pounds
+	SELECT DATE_FORMAT(w.workout_date, '%Y-%m') AS month, SUM(l.weight * l.reps) AS all_the_pounds
 	FROM lift AS l
-	LEFT OUTER JOIN workouts AS w
+	INNER JOIN workouts AS w
 	ON l.workout_id = w.workout_id
-	WHERE w.workout_date > '2017-01-01'
+	WHERE w.workout_date >= date_add(DATE_FORMAT(curdate(), '%Y-%m-01'), INTERVAL '-6' MONTH)
 	GROUP BY month;
 	`;
 
 	const _allLift = `
 	SELECT l.lift_type, w.workout_date, w.created_on, l.reps, l.weight
 	FROM lift AS l
-	LEFT OUTER JOIN (
+	INNER JOIN (
 	SELECT * FROM workouts 
 	WHERE workout_date > ?
 	AND workout_type LIKE 'lift'
 	LIMIT 1000
 	) AS w
-	ON l.workout_id = l.workout_id
+	ON l.workout_id = w.workout_id
 	ORDER BY w.workout_date
 	LIMIT 1000;
 	`;
@@ -197,6 +201,12 @@ let WorkoutQueries = function(connection){
 			break;
 			case 'lifttotalsummary':
 			connection.query(_liftsPerformance, callback);
+			break;
+			case 'liftslastmonths':
+			connection.query(_liftsLastMonths, callback);
+			break;
+			case 'liftsrecent':
+			connection.query(_mostRecntLifts, callback);
 			break;
 			case 'allcardio':
 			connection.query(_allCardio, callback);
