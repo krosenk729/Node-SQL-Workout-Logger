@@ -36,6 +36,30 @@ router.route('/cardio')
   });
 });
 
+router.route('/spin')
+.get(function(req, res){
+  queries.report('spinlast10', (err, data)=>{
+    if(err){ return res.send(err); }
+    res.json( data );
+  });
+});
+
+router.route('/spin/perf')
+.get(function(req, res){
+  queries.report('spinperformance', (err, data)=>{
+    if(err){ return res.send(err); }
+    res.json( data );
+  });
+});
+
+router.route('/run')
+.get(function(req, res){
+  queries.report('runlast10', (err, data)=>{
+    if(err){ return res.send(err); }
+    res.json( data );
+  });
+});
+
 router.route('/lift')
 .get(function(req, res){
   queries.report('alllift', (err, data)=>{
