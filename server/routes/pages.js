@@ -1,14 +1,13 @@
 const express = require('express');
+const app = express();
 const router = express.Router();
+const bodyParser = require('body-parser');
+const path = require('path');
 
 // Express Middleware (Body Parse, Static Files, View Engines)
 // ===========================================================
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-
-app.set('views', path.join(__dirname, 'server', 'views'));
-app.set('view engine', 'ejs');
-
 
 // Request Resonses
 // ===========================================================
