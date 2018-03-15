@@ -53,6 +53,17 @@
 					  <a class="nav-item nav-link" href="#">Lifts Monthly</a>
 					</div>
 
+					<div class="nav nav-pills nav-justified" data-bind="foreach: tabs">
+					  <a class="nav-item nav-link" href="#" data-bind="text: name, click: $parent.selectedTab, css:{active: $parent.selectedTab() === $data}"></a>
+					</div>
+					<div class="card" data-bind="with: selectedTab">
+						<div class="card-body">
+							<div data-bind="visible: !details.loaded()">Loading...</div>
+							<div data-bind="text: details">...Loaded</div>
+							<button data-bind="visible: details.loaded, click: details.refresh" type="button" class="btn btn-secondary">Refresh?</button>
+						</div>
+					</div>
+					
 				</article>
 			</div><!-- col -->
 		</div>
