@@ -35,11 +35,13 @@ Tab.prototype.getDetails = function(){
 	$.ajax({
 		type: 'GET',
 		url: url,
+		
 		success: function(data){
 			console.log(data);
-			// this.details(data);
+			// this.details(Math.random());
 		}
 	});
+	this.details(Math.random());
 	return 'Hello';
 }
 
@@ -59,7 +61,5 @@ var viewModel = {
 };
 
 viewModel.selectedTab(viewModel.tabs()[0]);
-
 viewModel.tabs()[0].details('helllllooooo world');
-
 ko.applyBindings(viewModel);

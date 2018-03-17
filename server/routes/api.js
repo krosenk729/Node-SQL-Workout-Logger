@@ -2,11 +2,14 @@ const express = require('express');
 const app = express();
 const router = express.Router();
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 // Middleware
 // ===========================================================
 app.use(bodyParser.json());
 const parseUrlencoded = bodyParser.urlencoded({extended: false});
+
+app.use(cors());
 
 // Database
 // ===========================================================
