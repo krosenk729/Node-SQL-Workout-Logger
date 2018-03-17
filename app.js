@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const path = require('path');
-const cors = require('cors')
+const cors = require('cors');
 
 // Express Middleware (Body Parse, Static Files, View Engines)
 // ===========================================================
@@ -14,7 +14,7 @@ app.use(express.static( path.join(__dirname, 'client') ));
 app.set('views', path.join(__dirname, 'server', 'views'));
 app.set('view engine', 'ejs');
 
-app.use(cors())
+app.use(cors());
 
 // Routes
 // ===========================================================

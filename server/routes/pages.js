@@ -25,9 +25,9 @@ router.get('/report', function(req, res){
   });
 });
 
-/*router.get(/^[^(api)]|^[^(images)]|^[^(javascripts)]|^[^(styles)]/i, function(req, res){
+router.get(/^[^(api)]|^[^(images)]|^[^(javascripts)]|^[^(styles)]/i, function(req, res){
   res.redirect('/log');
-});*/
+});
 
 
 // Export

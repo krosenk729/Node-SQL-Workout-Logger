@@ -14,6 +14,15 @@
 	.sidebar{
 		position: fixed;
 	}
+	.chart rect {
+		fill: steelblue;
+	}
+
+	.chart text {
+		fill: white;
+		font: 10px sans-serif;
+		text-anchor: middle;
+	}
 </style>
 </head>
 <body>
@@ -52,7 +61,8 @@
 					<div class="card" data-bind="with: selectedTab">
 						<div class="card-body">
 							<div data-bind="visible: !details.loaded()">Loading...</div>
-							<div data-bind="text: details">...Loaded</div>
+							<div id="loaded-body" data-bind="text: details">...Loaded
+							</div>
 							<button data-bind="visible: details.loaded, click: details.refresh" type="button" class="btn btn-secondary">Refresh?</button>
 						</div>
 					</div>
