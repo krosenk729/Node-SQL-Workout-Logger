@@ -32,16 +32,16 @@ function Tab(id, name, endpoint) {
 
 Tab.prototype.getDetails = function(){
 	const url = this.endpoint;
+	const self = this;
 	$.ajax({
 		type: 'GET',
 		url: url,
-		
 		success: function(data){
 			console.log(data);
-			// this.details(Math.random());
+			self.details(data);
 		}
 	});
-	this.details(Math.random());
+	// this.details(Math.random());
 	return 'Hello';
 }
 
@@ -61,5 +61,5 @@ var viewModel = {
 };
 
 viewModel.selectedTab(viewModel.tabs()[0]);
-viewModel.tabs()[0].details('helllllooooo world');
+
 ko.applyBindings(viewModel);
