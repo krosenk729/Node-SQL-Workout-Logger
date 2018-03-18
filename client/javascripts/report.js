@@ -1,124 +1,193 @@
-// http://jsfiddle.net/qq5zqLcs/
-
-ko.onDemandObservable = function(callback, target){
-	var _value = ko.observable();
-	var result = ko.computed({
-		read: function(){
-			if(!result.loaded()){
-				callback.call(target);
-			}
-			return _value();
-		},
-		write: function(newValue){
-			result.loaded(true);
-			_value(newValue);
-		},
-		deferEvaluation: true
-	});
-
-	result.loaded = ko.observable();
-	result.refresh = function(){
-		result.loaded(false);
-	}
-	return result;
-};
-
-function Tab(id, name, endpoint) {
-	this.id = id;
-	this.name = ko.observable(name);
+function Report(name, selector, endpoint, chartFunction) {
+	this.name = name;
+	this.selector = selector;
 	this.endpoint = endpoint;
-	this.details = ko.onDemandObservable(this.getDetails, this);
-	this.getName = name;
+	this.chartFunction = chartFunction;
 }
 
-Tab.prototype.getDetails = function(){
+Report.prototype.getDetails = function(){
 	const url = this.endpoint;
 	const self = this;
 	$.ajax({
 		type: 'GET',
 		url: url,
 		success: function(data){
-			console.log(data);
-			const test = jQuery('<svg>');
-			self.details(test);
-			console.log(self.getName);
-			if(self.getName == 'Lifts'){ monthlyReport(data) }
+			let canvas = document.getElementById(self.selector).firstChild;
+			self.chartFunction(canvas, data);
 		}
 	});
-	// this.details(Math.random());
-	return 'Hello';
 }
 
-var viewModel = {
-	tabs: ko.observableArray([
-		new Tab(1, "Spin", "https://workoutsql.herokuapp.com/api/spin"),
-		new Tab(2, "Spin Performance", "https://workoutsql.herokuapp.com/api/spin/perf"),
-		new Tab(3, "Run", "https://workoutsql.herokuapp.com/api/run"),
-		new Tab(4, "Lifts", "https://workoutsql.herokuapp.com/api/lift/recent"),
-		new Tab(5, "Lifts Monthly", "https://workoutsql.herokuapp.com/api/lift/lastMonths")
-	]),
-	// showDetails: function(tab){
-	// 	this.selectedTab(tab);
-	// },
 
-	selectedTab: ko.observable()
+let spinChart = function(canvas, data){
+	let ctx = canvas.getContext('2d');
+	let group1 = data.map( i => i.power),
+		group2 = data.map( i => i.rank),
+		axis = data.map( i => i.workout_date.slice(0, 10));
+	let spinBarChart = new Chart(ctx, {
+		type: 'bar',
+		data: {
+			datasets: [{
+				label: 'Power',
+				data: group1,
+				yAxisID: 'y-axis-1'
+			},{
+				label: 'Rank',
+				data: group2,
+				type: 'line',
+				fill: false,
+				yAxisID: 'y-axis-2'
+			}],
+			labels: axis
+		},
+		options: {
+			responsive: true,
+			legend: {position: top},
+			scales: {
+				yAxes: [{
+					type: 'linear',
+					display: true,
+					position: 'left',
+					id: 'y-axis-1'
+				}, {
+					type: 'linear',
+					display: true,
+					position: 'right',
+					id: 'y-axis-2'
+				}]
+			}
+		}
+	});
 };
 
-viewModel.selectedTab(viewModel.tabs()[0]);
-
-ko.applyBindings(viewModel);
-
-///////////////////////////////////////////////////////////////////
-
-monthlyReport = function(data){
-	let svg =  d3.select('#loaded-body').append('svg'),
-		margin = {
-			top: 20, 
-			right: 20, 
-			bottom: 30, 
-			left: 40
+let runChart = function(canvas, data){
+	let ctx = canvas.getContext('2d');
+	let group1 = data.map( i => i.distance),
+		group2 = data.map( i => i.pace),
+		axis = data.map( i => i.workout_date.slice(0, 10));
+	let runChart = new Chart(ctx, {
+		type: 'line',
+		data: {
+			datasets: [{
+				label: 'Distance',
+				data: group1,
+				pointRadius: 5,
+				pointHoverRadius: 15,
+				pointStyle: 'triangle',
+				yAxisID: 'y-axis-1'
+			},{
+				label: 'Pace',
+				data: group2,
+				pointRadius: 5,
+				pointHoverRadius: 15,
+				pointStyle: 'rect',
+				yAxisID: 'y-axis-2'
+			}],
+			labels: axis
 		},
-    	width = +svg.attr('width') - margin.left - margin.right,
-    	height = +svg.attr('height') - margin.top - margin.bottom;
-    
-    // X & Y Scales
-    let x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
-    	y = d3.scaleLinear().rangeRound([height, 0]);
-	
-	let g = svg.append('g')
-			.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')' );
-
-	
-	x.domain(...data.map(i => i.month));
-	y.domain([0, Math.max(...data.map(i => i.all_the_pounds))]);
-
-	g.append('g')
-		.attr('class', 'axis axis--x')
-		.attr('transform', 'translate(0,' + height + ')')
-		.call(d3.axisBottom(x));
-
-	g.append('g')
-		.attr('class', 'axis axis--y')
-		.call(d3.axisLeft(y).ticks(10, '%'))
-		.append('text')
-		.attr('transform', 'rotate(-90)')
-		.attr('y', 6)
-		.attr('dy', '0.71em')
-		.attr('text-anchor', 'end')
-		.text('Total Lbs');
-
-	g.selectAll('.bar')
-		.data()
-		.attr('class', 'axis axis--y')
-		.call(d3.axisLeft(y).ticks(10, '%'))
-
-	g.selectAll(".bar")
-		.data(data)
-		.enter().append('rect')
-		.attr('class', 'bar')
-		.attr('x', d => d.month)
-		.attr('y', d => d.all_the_pounds)
-		.attr('width', x.bandwidth())
-		.attr('height', d => height - y(d.all_the_pounds));
-
+		options: {
+			responsive: true,
+			legend: {position: top},
+			scales: {
+				yAxes: [{
+					type: 'linear',
+					display: true,
+					position: 'left',
+					id: 'y-axis-1',
+					bottom: 0,
+					ticks: {min: 0}
+				}, {
+					type: 'linear',
+					display: true,
+					position: 'right',
+					id: 'y-axis-2'
+				}]
+			}
+		}
+	});
 }
+
+let liftChart = function(canvas, data){
+	let ctx = canvas.getContext('2d');
+	let group1 = data.filter( i => i.lift_type === 'deadlift').map( i => i.weight),
+		group1_color = data.filter( i => i.lift_type === 'deadlift').map( i => 'rgb(54, 162, 235)'),
+		group1_labels = data.filter( i => i.lift_type === 'deadlift').map( i => i.workout_date.slice(0, 10)),
+		group2 = data.filter( i => i.lift_type === 'bench').map( i => i.weight),
+		group2_color = data.filter( i => i.lift_type === 'bench').map( i => 'rgb(153, 102, 255)'),
+		group2_labels = data.filter( i => i.lift_type === 'bench').map( i => i.workout_date.slice(0, 10)),
+		group3 = data.filter( i => i.lift_type === 'squat').map( i => i.weight),
+		group3_color = data.filter( i => i.lift_type === 'squat').map( i => 'rgb(75, 192, 192)'),
+		group3_labels = data.filter( i => i.lift_type === 'squat').map( i => i.workout_date.slice(0, 10));
+	let liftChart = new Chart(ctx, {
+		type: 'bar',
+		data: {
+			datasets: [{
+				data: [...group1, ...group2, ...group3],
+				backgroundColor: [...group1_color, ...group2_color, ...group3_color]
+			}],
+			labels: [...group1_labels, ...group2_labels, ...group3_labels]
+		},
+		options: {
+			responsive: true,
+			legend: {position: top}
+		}
+	});
+};
+
+let liftMonthChart = function(canvas, data){
+	let ctx = canvas.getContext('2d');
+	let group1 = data.map( i => i.all_the_pounds),
+		axis = data.map( i => i.month );
+	let spinBarChart = new Chart(ctx, {
+		type: 'bar',
+		data: {
+			datasets: [{
+				label: 'Total Pounds',
+				data: group1
+			}],
+			labels: axis
+		},
+		options: {
+			responsive: true,
+			legend: {position: top}
+		}
+	});
+};
+
+let spinPerfChart = function(canvas, data){
+	let tableRows;
+	for(let i of data[0]){
+		tableRows += `<tr>
+		<th scope="row">${i.month}</th>
+		<td>${i['SUM(c.duration)']}</td>
+		<td>${i['AVG(c.power)']}</td>
+		<td>${i['AVG(c.rank)']}</td>
+		<td>${i['MAX(c.power)']}</td>
+		</tr>`;
+	}
+	let table_frag = `
+	<table class="table">
+	<thead>
+	<tr>
+	<th scope="col">Month</th>
+	<th scope="col">Total Duration</th>
+	<th scope="col">Avg Power</th>
+	<th scope="col">Avg Rank</th>
+	<th scope="col">Max Power</th>
+	</tr>
+	</thead>
+	<tbody>${tableRows}</tbody>
+	</table>
+	`;
+	$('#chart-spin-perf > canvas').replaceWith(table_frag);
+};
+
+const reports = [
+	new Report("Spin", "chart-spin", "https://workoutsql.herokuapp.com/api/spin", spinChart),
+	new Report("Spin Performance", "chart-spin-perf", "https://workoutsql.herokuapp.com/api/spin/perf", spinPerfChart),
+	new Report("Run", "chart-run", "https://workoutsql.herokuapp.com/api/run", runChart),
+	new Report("Lifts", "chart-lift", "https://workoutsql.herokuapp.com/api/lift/recent", liftChart),
+	new Report("Lifts Monthly", "chart-lift-month", "https://workoutsql.herokuapp.com/api/lift/lastMonths", liftMonthChart)
+];
+
+reports.forEach(r => r.getDetails());
