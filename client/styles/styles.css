@@ -1,0 +1,38 @@
+
+/* **************************************************************/
+/* Layout
+/* **************************************************************/
+
+.sidebar{
+	position: fixed;
+}
+
+.card{
+	min-height: 100vh;
+}
+
+/* **************************************************************/
+/* Overriding bootstrap colors 
+/* **************************************************************/
+
+/*
+light purple: 716DF9
+dark puple: 4931A8
+light aqua: 75E2E4
+dark aqua: 48CDD2
+*/
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link{
+	background-color: #4931A8;
+}
+
+a{
+	color: #4931A8;
+}
+a:hover{
+	color: #716DF9;
+}
+
+code{
+	color: #9E9E9E;
+}

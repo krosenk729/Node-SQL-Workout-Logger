@@ -12,7 +12,7 @@ Report.prototype.getDetails = function(){
 		type: 'GET',
 		url: url,
 		success: function(data){
-			let canvas = document.getElementById(self.selector).firstChild;
+			let canvas = $(`#${self.selector}`).children()[0];
 			self.chartFunction(canvas, data);
 		}
 	});
@@ -30,13 +30,15 @@ let spinChart = function(canvas, data){
 			datasets: [{
 				label: 'Power',
 				data: group1,
-				yAxisID: 'y-axis-1'
+				yAxisID: 'y-axis-1',
+				backgroundColor: 'rgba(72, 205, 210, .5)'
 			},{
 				label: 'Rank',
 				data: group2,
 				type: 'line',
 				fill: false,
-				yAxisID: 'y-axis-2'
+				yAxisID: 'y-axis-2',
+				borderColor: 'rgba(0, 232, 158, .5)'
 			}],
 			labels: axis
 		},
@@ -74,14 +76,16 @@ let runChart = function(canvas, data){
 				pointRadius: 5,
 				pointHoverRadius: 15,
 				pointStyle: 'triangle',
-				yAxisID: 'y-axis-1'
+				yAxisID: 'y-axis-1',
+				backgroundColor: 'rgba(128, 126, 251, .5)'
 			},{
 				label: 'Pace',
 				data: group2,
 				pointRadius: 5,
 				pointHoverRadius: 15,
 				pointStyle: 'rect',
-				yAxisID: 'y-axis-2'
+				yAxisID: 'y-axis-2',
+				backgroundColor: 'rgba(117, 226, 228, .5)'
 			}],
 			labels: axis
 		},
@@ -110,13 +114,13 @@ let runChart = function(canvas, data){
 let liftChart = function(canvas, data){
 	let ctx = canvas.getContext('2d');
 	let group1 = data.filter( i => i.lift_type === 'deadlift').map( i => i.weight),
-		group1_color = data.filter( i => i.lift_type === 'deadlift').map( i => 'rgb(54, 162, 235)'),
+		group1_color = data.filter( i => i.lift_type === 'deadlift').map( i => 'rgba(0, 232, 158, .5)'),
 		group1_labels = data.filter( i => i.lift_type === 'deadlift').map( i => i.workout_date.slice(0, 10)),
 		group2 = data.filter( i => i.lift_type === 'bench').map( i => i.weight),
-		group2_color = data.filter( i => i.lift_type === 'bench').map( i => 'rgb(153, 102, 255)'),
+		group2_color = data.filter( i => i.lift_type === 'bench').map( i => 'rgba(72, 205, 210, .5)'),
 		group2_labels = data.filter( i => i.lift_type === 'bench').map( i => i.workout_date.slice(0, 10)),
 		group3 = data.filter( i => i.lift_type === 'squat').map( i => i.weight),
-		group3_color = data.filter( i => i.lift_type === 'squat').map( i => 'rgb(75, 192, 192)'),
+		group3_color = data.filter( i => i.lift_type === 'squat').map( i => 'rgba(61, 128, 232, .5)'),
 		group3_labels = data.filter( i => i.lift_type === 'squat').map( i => i.workout_date.slice(0, 10));
 	let liftChart = new Chart(ctx, {
 		type: 'bar',
@@ -143,7 +147,8 @@ let liftMonthChart = function(canvas, data){
 		data: {
 			datasets: [{
 				label: 'Total Pounds',
-				data: group1
+				data: group1,
+				backgroundColor: 'rgba(0, 232, 158, .5)'
 			}],
 			labels: axis
 		},
@@ -155,7 +160,7 @@ let liftMonthChart = function(canvas, data){
 };
 
 let spinPerfChart = function(canvas, data){
-	let tableRows;
+	let tableRows = '<tbody>';
 	for(let i of data[0]){
 		tableRows += `<tr>
 		<th scope="row">${i.month}</th>
@@ -165,21 +170,8 @@ let spinPerfChart = function(canvas, data){
 		<td>${i['MAX(c.power)']}</td>
 		</tr>`;
 	}
-	let table_frag = `
-	<table class="table">
-	<thead>
-	<tr>
-	<th scope="col">Month</th>
-	<th scope="col">Total Duration</th>
-	<th scope="col">Avg Power</th>
-	<th scope="col">Avg Rank</th>
-	<th scope="col">Max Power</th>
-	</tr>
-	</thead>
-	<tbody>${tableRows}</tbody>
-	</table>
-	`;
-	$('#chart-spin-perf > canvas').replaceWith(table_frag);
+	tableRows += '</tbody>';
+	$('#chart-spin-perf > table').append(tableRows);
 };
 
 const reports = [

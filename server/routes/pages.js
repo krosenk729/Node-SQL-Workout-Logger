@@ -21,7 +21,7 @@ router.get('/log', function(req, res){
 
 router.get('/report', function(req, res){
     res.render('report', { 
-    title: 'Express'
+    title: 'Report on Those Logs'
   });
 });
 
