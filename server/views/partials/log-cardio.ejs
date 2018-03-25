@@ -1,0 +1,25 @@
+
+<div class="form-group row">
+  <label for="duration" class="col-sm-2 col-form-label">Time (minutes)</label>
+  <div class="col-sm-10">
+    <input type="number" min="0" step="0.1" class="form-control" name="duration" data-bind="value: duration, valueUpdate: 'afterkeydown'" />
+  </div>
+</div>
+<div class="form-group row" data-bind="visible: type()==='run'">
+  <label for="distance" class="col-sm-2 col-form-label">Distance (miles)</label>
+  <div class="col-sm-10">
+    <input type="number" min="0" step="0.1" class="form-control" name="distance" data-bind="value: distance, valueUpdate: 'afterkeydown'" />
+  </div>
+</div>
+<div class="form-group row" data-bind="visible: type()==='spin'">
+  <label for="power" class="col-sm-2 col-form-label">Power</label>
+  <div class="col-sm-10">
+    <input type="number" min="0" class="form-control" name="power" data-bind="value: power, valueUpdate: 'afterkeydown'" />
+  </div>
+</div>
+<div class="form-group row" data-bind="visible: type()==='spin'">
+  <label for="rank" class="col-sm-2 col-form-label">Rank</label>
+  <div class="col-sm-10">
+    <input type="number" min="0" class="form-control" id="rank" data-bind="value: rank, valueUpdate: 'afterkeydown'" />
+  </div>
+</div>

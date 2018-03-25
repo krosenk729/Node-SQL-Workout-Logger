@@ -1,0 +1,37 @@
+
+<div class="form-group row">
+  <legend class="col-form-label col-sm-2 pt-0">Lift</legend>
+  <div class="col-sm-10">
+    <div class="form-group row">
+      <div class="custom-control custom-control-inline custom-radio">
+        <label class="control control-radio">
+          Bench
+          <input type="radio" value="bench" checked data-bind="checked: lift_type" />
+          <div class="control-indicator">💪</div>
+        </label>
+        <label class="control control-radio">
+          Squat
+          <input type="radio" value="squat" data-bind="checked: lift_type" />
+          <div class="control-indicator">😅</div>
+        </label>
+        <label class="control control-radio">
+          Deadlift
+          <input type="radio" value="deadlift" data-bind="checked: lift_type" />
+          <div class="control-indicator">🏋</div>
+        </label>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="reps" class="col-sm-2 col-form-label">Reps</label>
+      <div class="col-sm-10">
+        <input type="number" min="0" class="form-control" name="reps" value="10" data-bind="value: reps, valueUpdate: 'afterkeydown'" />
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="weight" class="col-sm-2 col-form-label">Weight</label>
+      <div class="col-sm-10">
+        <input type="number" min="0" class="form-control" name="weight" value="45" data-bind="value: weight, valueUpdate: 'afterkeydown'" />
+      </div>
+    </div>
+  </div>
+</div>

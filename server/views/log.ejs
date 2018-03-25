@@ -15,23 +15,13 @@
           <h1><%= title %></h1>
           <p class="lead">The two mile walk you did do is better than the four mile run you did not</p>
           <form id="workout-questions">
-            <div class="custom-control custom-control-inline custom-radio-buttons">
-              <label>
-                <input type="radio" name="type" value="run" checked data-bind="checked: type" />
-                Run
-              </label>
-            </div>
-            <div class="custom-control custom-control-inline custom-radio-buttons">
-              <label>
-                <input type="radio" name="type" value="spin" checked data-bind="checked: type" />
-                Spin
-              </label>
-            </div>
-            <div class="custom-control custom-control-inline custom-radio-buttons">
-              <label>
-                <input type="radio" name="type" value="lift" checked data-bind="checked: type" />
-                Lift
-              </label>
+            <div class="custom-control custom-control-inline custom-radio-switch d-flex w-100 justify-content-center">
+              <input id="run-radio" type="radio" name="type" value="run" checked data-bind="checked: type" />
+              <label for="run-radio">Run</label>
+              <input id="spin-radio" type="radio" name="type" value="spin" checked data-bind="checked: type" />
+              <label for="spin-radio">Spin</label>
+              <input id="lift-radio" type="radio" name="type" value="lift" checked data-bind="checked: type" />
+              <label for="lift-radio">Lift</label>
             </div>
             <div class="form-group row">
               <label for="workout_date" class="col-sm-2 col-form-label">Date</label>
@@ -40,96 +30,41 @@
               </div>
             </div>
             <section class="cardio-questions" data-bind="visible: type()!='lift'">
-              <div class="form-group row">
-                <label for="duration" class="col-sm-2 col-form-label">Time (minutes)</label>
-                <div class="col-sm-10">
-                  <input type="number" min="0" step="0.1" class="form-control" name="duration" data-bind="value: duration, valueUpdate: 'afterkeydown'" />
-                </div>
-              </div>
-              <div class="form-group row" data-bind="visible: type()==='run'">
-                <label for="distance" class="col-sm-2 col-form-label">Distance (miles)</label>
-                <div class="col-sm-10">
-                  <input type="number" min="0" step="0.1" class="form-control" name="distance" data-bind="value: distance, valueUpdate: 'afterkeydown'" />
-                </div>
-              </div>
-              <div class="form-group row" data-bind="visible: type()==='spin'">
-                <label for="power" class="col-sm-2 col-form-label">Power</label>
-                <div class="col-sm-10">
-                  <input type="number" min="0" class="form-control" name="power" data-bind="value: power, valueUpdate: 'afterkeydown'" />
-                </div>
-              </div>
-              <div class="form-group row" data-bind="visible: type()==='spin'">
-                <label for="rank" class="col-sm-2 col-form-label">Rank</label>
-                <div class="col-sm-10">
-                  <input type="number" min="0" class="form-control" id="rank" data-bind="value: rank, valueUpdate: 'afterkeydown'" />
-                </div>
-              </div>
+              <% include ./partials/log-cardio %>
             </section>
             <section class="lift-questions" data-bind="foreach: lifts, visible: type()==='lift'">
-              <div class="form-group row">
-                <legend class="col-form-label col-sm-2 pt-0">Lift</legend>
-                <div class="col-sm-10">
-                  <div class="custom-control custom-control-inline custom-radio">
-                    <label>
-                      <input type="radio" value="bench" checked data-bind="checked: lift_type" />
-                      Bench
-                    </label>
-                  </div>
-                  <div class="custom-control custom-control-inline custom-radio">
-                    <label>
-                      <input type="radio" value="squat" data-bind="checked: lift_type" />
-                      Squat
-                    </label>
-                  </div>
-                  <div class="custom-control custom-control-inline custom-radio">
-                    <label>
-                      <input type="radio" value="deadlift" data-bind="checked: lift_type" />
-                      Deadlift
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="reps" class="col-sm-2 col-form-label">Reps</label>
-                <div class="col-sm-10">
-                  <input type="number" min="0" class="form-control" name="reps" value="10" data-bind="value: reps, valueUpdate: 'afterkeydown'" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="weight" class="col-sm-2 col-form-label">Weight</label>
-                <div class="col-sm-10">
-                  <input type="number" min="0" class="form-control" name="weight" value="45" data-bind="value: weight, valueUpdate: 'afterkeydown'" />
-                </div>
-              </div>
-            </section>
-            <a href="#" data-bind="click: $root.addlift, visible: type()==='lift'">Add Lift</a>
-            <button type="submit" class="btn">Log Workout</button>
-          </form>
-        </article>
-      </div> <!-- col --> 
+              <% include ./partials/log-lift %>
+              </section>
+              <div class="form-group row flex-column align-items-center">
+              <a href="#" data-bind="click: $root.addlift, visible: type()==='lift'">Add Another Lift</a>
+              <button type="submit" class="btn btn-primary mt-3">Log Workout</button>
+            </div>
+            </form>
+          </article>
+        </div> <!-- col --> 
+      </div>
+    </main> <!-- container-fluid -->
+    <div>
+      <hr>
+      <h4>Your Workout...</h4>
+      <ul>
+        <li data-bind="text: type"></li>
+        <li data-bind="text: workout_date"></li>
+        <li data-bind="text: duration"></li>
+        <li data-bind="text: distance"></li>
+        <li data-bind="text: power"></li>
+        <li data-bind="text: rank"></li>
+        <li> 
+          <ul data-bind="foreach: lifts">
+            <li>
+              <span data-bind="text: lift_type"> </span> | 
+              <span data-bind="text: weight"> </span> | 
+              <span data-bind="text: reps"> </span>
+            </li>
+          </ul>
+        </li>
+      </ul>
     </div>
-  </main> <!-- container-fluid -->
-  <div>
-    <hr>
-    <h4>Your Workout...</h4>
-    <ul>
-      <li data-bind="text: type"></li>
-      <li data-bind="text: workout_date"></li>
-      <li data-bind="text: duration"></li>
-      <li data-bind="text: distance"></li>
-      <li data-bind="text: power"></li>
-      <li data-bind="text: rank"></li>
-      <li> 
-        <ul data-bind="foreach: lifts">
-          <li>
-            <span data-bind="text: lift_type"> </span> | 
-            <span data-bind="text: weight"> </span> | 
-            <span data-bind="text: reps"> </span>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </div>
-  <script src="javascripts/log.js"></script>
-</body>
-</html>
+    <script src="javascripts/log.js"></script>
+  </body>
+  </html>
