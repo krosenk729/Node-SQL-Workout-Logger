@@ -24,7 +24,6 @@ CLI Component
 
 ![CLI](/client/images/cli.gif)
 
-
 ## Your Turn: Setup Instructions
 
 > "I thought those workouts were cardio before I seeded this database"
