@@ -27,13 +27,16 @@
 // Layout
 // **************************************************************/
 
-
 .sidebar{
 	position: fixed;
 }
 
 .card{
 	min-height: 100vh;
+}
+
+.center{
+	text-align: center;
 }
 
 // **************************************************************/
@@ -74,6 +77,10 @@ a{
 
 code{
 	color: $c-grey;
+}
+
+#success{
+	background: transparentize($c-blackish, .1);
 }
 
 

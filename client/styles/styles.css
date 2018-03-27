@@ -4,6 +4,9 @@
 .card {
   min-height: 100vh; }
 
+.center {
+  text-align: center; }
+
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   background-color: #4931A8; }
 
@@ -33,6 +36,9 @@ a {
 
 code {
   color: #5F5F5F; }
+
+#success {
+  background: rgba(33, 33, 33, 0.9); }
 
 .custom-control-inline.custom-radio-switch input, .control.control-radio input {
   position: absolute;

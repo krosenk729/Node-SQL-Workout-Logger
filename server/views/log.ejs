@@ -6,7 +6,7 @@
 </style>
 </head>
 <body>
-  <%- include('partials/nav',{page: 'report'}) %>
+  <%- include('partials/nav',{page: 'log'}) %>
   <main class="container-fluid ">
     <div class="row flex-row-reverse flex-sm-row-reverse">
       <%- include('partials/sidebar') %>
@@ -44,27 +44,7 @@
         </div> <!-- col --> 
       </div>
     </main> <!-- container-fluid -->
-    <div>
-      <hr>
-      <h4>Your Workout...</h4>
-      <ul>
-        <li data-bind="text: type"></li>
-        <li data-bind="text: workout_date"></li>
-        <li data-bind="text: duration"></li>
-        <li data-bind="text: distance"></li>
-        <li data-bind="text: power"></li>
-        <li data-bind="text: rank"></li>
-        <li> 
-          <ul data-bind="foreach: lifts">
-            <li>
-              <span data-bind="text: lift_type"> </span> | 
-              <span data-bind="text: weight"> </span> | 
-              <span data-bind="text: reps"> </span>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
+    <%- include('partials/success') %>
     <script src="javascripts/log.js"></script>
   </body>
   </html>

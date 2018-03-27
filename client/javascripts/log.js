@@ -1,4 +1,4 @@
-
+(function(){
 // Utility Function: formatted date 
 // ===========================================================
 
@@ -87,4 +87,10 @@ $('form').on('submit', function(event){
       console.log(data);
     }
   });
+  $('#success').show();
 });
+
+$('#success button').click(()=>{
+  $('#success').hide();
+});
+})();
