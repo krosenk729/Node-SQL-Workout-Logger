@@ -5,11 +5,25 @@ Project inspired by homework week 11 for Code Bootcamp; however, instead of stor
 
 ## Demo: A Workout For Your Eyes
 
+UI Component
+
+
+![UI](/client/images/views.gif)
+
+---
+
 Seeding DB
+
+
 ![seed](/client/images/seed.gif)
 
+---
+
 CLI Component
+
+
 ![CLI](/client/images/cli.gif)
+
 
 ## Your Turn: Setup Instructions
 
