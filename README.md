@@ -12,6 +12,7 @@ Project Link: https://workoutsql.herokuapp.com/report
 + [Bootstrap](http://getbootstrap.com/)
 + [SCSS](http://sass-lang.com/)
 + [EJS](http://www.ejs.co/)
++ [ChartJS](http://www.chartjs.org/)
 
 ## Demo: A Workout For Your Eyes
 
