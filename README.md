@@ -1,7 +1,17 @@
 # Log Yo' Workouts 
-#### Using Node Code & SQL DB
 
-Project inspired by homework week 11 for Code Bootcamp; however, instead of storing a faux-product catalog, this app stores workout history (and retrieves/updates it). 
+Project Link: https://workoutsql.herokuapp.com/report
+
+## Using Node Code & SQL DB
+
++ [Node](https://nodejs.org/en/)
++ [ExpressJS](http://expressjs.com/)
++ [MySQL](https://github.com/mysqljs/mysql)
++ [JawsDB](https://devcenter.heroku.com/articles/jawsdb)
++ [KnockoutJS](http://knockoutjs.com/)
++ [Bootstrap](http://getbootstrap.com/)
++ [SCSS](http://sass-lang.com/)
++ [EJS](http://www.ejs.co/)
 
 ## Demo: A Workout For Your Eyes
 
@@ -40,6 +50,7 @@ node schema.js
 node seed.js 
 (pause and go workout)
 ```
+
 
 ## Up & Running: Pun Intended
 
