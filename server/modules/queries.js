@@ -1,4 +1,4 @@
-let WorkoutQueries = function(connection){
+const WorkoutQueries = function(connection){
 	const _mostRecentCardio = `
 	SELECT c.cardio_type, w.workout_date, c.duration
 	FROM cardio AS c
@@ -156,34 +156,35 @@ let WorkoutQueries = function(connection){
 		// Comment these out to preserve sanity
 		if(err){ console.log('EFFOR: \tSomeone call the developer and tell them...\n \n', err) }
 		if(res){ console.log('response: ', res) }
+		return res;
 	}
 
-	this.insertCardio = function(workout_date, cardio_type, duration, distance, power, rank){
+	this.insertCardio = function(workout_date, cardio_type, duration, distance, power, rank, cb = logOutput){
 		connection.query(_insertWrapper(workout_date, 'cardio'), (err, res)=>{
 			console.log('error: ', err);
 			console.log('response: ', res);
 			connection.query(
 				_cardioInsert,
 				[cardio_type, duration, distance, power, rank, res.insertId], 
-				logOutput);
+				cb);
 		});
 	}
 
-	this.insertLift = function(workout_date, lift_type, reps, weight){
+	this.insertLift = function(workout_date, lift_type, reps, weight, cb = logOutput){
 		connection.query(
 			_liftInsertByDate,
 			[lift_type, reps, weight, workout_date], 
-			logOutput);
+			cb);
 	}
 	
-	this.insertSingleLift = function(workout_date, lift_type, reps, weight){
+	this.insertSingleLift = function(workout_date, lift_type, reps, weight, cb = logOutput){
 		connection.query(_insertWrapper(workout_date, 'lift'), (err, res)=>{
 			console.log('error: ', err);
 			console.log('response: ', res);
 			connection.query(
 				_liftInsert,
 				[lift_type, reps, weight, res.insertId], 
-				logOutput);
+				cb);
 		});
 	}
 
@@ -200,9 +201,6 @@ let WorkoutQueries = function(connection){
 	}
 	
 	this.report = function(type, callback = logOutput){
-		// if(!callback){
-		// 	callback = logOutput;
-		// }
 		switch(type){
 			case 'runmilesbymonth':
 			connection.query(_runsMilesByMonths, callback);
